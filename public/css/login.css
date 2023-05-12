@@ -1,0 +1,42 @@
+body {
+    /* background-image: url('../imgs/fondo.jpg')!important; */
+    background-size: cover!important;
+    background-position: center!important;
+    background-repeat: no-repeat!important;
+    background: #ced1ca!important;
+}
+
+.login-box {
+    margin-top: -50px!important;
+    border: solid 3px #bf2a2e;
+    height: auto;
+    box-shadow: -3px 3px 20px 3px #bf2a2e;
+}
+
+.card {
+    margin-bottom: 0px;
+}
+
+.login-card-body {
+    color: white;
+    background: #919fba!important;
+}
+
+.input-group-text {
+    color: white!important;
+}
+
+.login-logo {
+    margin-bottom: 0px;
+    background: #919fba!important;
+}
+
+.login-logo a {
+    color: white;
+}
+
+.login-logo img {
+    height: 150px;
+    width: 90%;
+    max-width: 100%;
+}

@@ -1,0 +1,19 @@
+#contenedorFecha {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#contenedorFecha span {
+    margin: 5px;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+#txtHora {
+    padding: 10px;
+    border: solid 3px rgb(109, 84, 221);
+    background: black;
+    font-family: 'Times New Roman', Times, serif;
+    color: white;
+}
