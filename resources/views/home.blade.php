@@ -15,18 +15,18 @@
 
 @section('content')
     @php
-    $nombre_usuario = '';
-    if (Auth::user()->datosUsuario) {
-        $nombre_usuario =
-            Auth::user()->datosUsuario->nombre .
-            ' ' .
-            Auth::user()->datosUsuario->paterno .
-            '
+        $nombre_usuario = '';
+        if (Auth::user()->datosUsuario) {
+            $nombre_usuario =
+                Auth::user()->datosUsuario->nombre .
+                ' ' .
+                Auth::user()->datosUsuario->paterno .
+                '
                                         ' .
-            Auth::user()->datosUsuario->materno;
-    } else {
-        $nombre_usuario = Auth::user()->name;
-    }
+                Auth::user()->datosUsuario->materno;
+        } else {
+            $nombre_usuario = Auth::user()->name;
+        }
     @endphp
 
     <!-- Content Header (Page header) -->
@@ -49,15 +49,6 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            @if (Auth::user()->tipo == 'ADMINISTRADOR')
-                @include('includes.home.home_admin')
-            @endif
-            @if (Auth::user()->tipo == 'EMPRESA')
-                @include('includes.home.home_empresa')
-            @endif
-            @if (Auth::user()->tipo == 'DISTRIBUIDOR')
-                @include('includes.home.home_distribuidor')
-            @endif
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -69,7 +60,17 @@
                         </div>
                     </div>
                 </div>
-
+            </div>
+            @if (Auth::user()->tipo == 'ADMINISTRADOR')
+                @include('includes.home.home_admin')
+            @endif
+            @if (Auth::user()->tipo == 'EMPRESA')
+                @include('includes.home.home_empresa')
+            @endif
+            @if (Auth::user()->tipo == 'DISTRIBUIDOR')
+                @include('includes.home.home_distribuidor')
+            @endif
+            <div class="row">
                 @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'EMPRESA')
                     <div class="col-md-6">
                         <div class="card">
@@ -159,7 +160,10 @@
                                         <label>Distribuidor:</label>
                                         @if (Auth::user()->tipo == 'DISTRIBUIDOR')
                                             <select name="distribuidor" id="distribuidor2" class="form-control">
-                                                <option value="{{ Auth::user()->id }}">{{ Auth::user()->datosUsuario->nombre }} {{ Auth::user()->datosUsuario->paterno }} {{ Auth::user()->datosUsuario->materno }}</option>
+                                                <option value="{{ Auth::user()->id }}">
+                                                    {{ Auth::user()->datosUsuario->nombre }}
+                                                    {{ Auth::user()->datosUsuario->paterno }}
+                                                    {{ Auth::user()->datosUsuario->materno }}</option>
                                             </select>
                                         @else
                                             <select class="form-control" name="distribuidor" id="distribuidor2">
@@ -192,15 +196,15 @@
 @section('scripts')
     <script>
         @if (session('bien'))
-            mensajeNotificacion('{{ session('bien') }}','success');
+            mensajeNotificacion('{{ session('bien') }}', 'success');
         @endif
 
         @if (session('info'))
-            mensajeNotificacion('{{ session('info') }}','info');
+            mensajeNotificacion('{{ session('info') }}', 'info');
         @endif
 
         @if (session('error'))
-            mensajeNotificacion('{{ session('error') }}','error');
+            mensajeNotificacion('{{ session('error') }}', 'error');
         @endif
     </script>
     <script src="{{ asset('js/reloj.js') }}"></script>
