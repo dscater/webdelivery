@@ -27,7 +27,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Modificar cliente</h3>
+                            <h3 class="card-title">Modificar Registro</h3>
                         </div>
                         <!-- /.card-header -->
                         {{ Form::model($cliente,['route' => ['clientes.update',$cliente->id], 'method' => 'put', 'files' => true]) }}

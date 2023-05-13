@@ -27,7 +27,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Nuevo Usuario</h3>
+                            <h3 class="card-title">Nuevo Registro</h3>
                         </div>
                         <!-- /.card-header -->
                         {{ Form::open(['route' => 'clientes.store', 'method' => 'post', 'files' => true]) }}

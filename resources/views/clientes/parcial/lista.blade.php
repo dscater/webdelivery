@@ -30,9 +30,6 @@
                             {{ $cliente->paterno }}
                             {{ $cliente->materno }}
                         </div>
-                        <div class="ocupacion_cliente">
-                            {{ $cliente->empresa->nombre }}
-                        </div>
                         <div class="ci_cliente">
                             {{ $cliente->ci }} {{ $cliente->ci_exp }}
                         </div>

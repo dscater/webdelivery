@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     protected $fillable = [
-        'empresa_id', 'nombre', 'paterno', 'materno', 'ci',
+        'nombre', 'paterno', 'materno', 'ci',
         'ci_exp', 'dir', 'email', 'fono', 'cel',
         'user_id', 'fecha_registro',
     ];
@@ -20,10 +20,5 @@ class Cliente extends Model
     public function entregas()
     {
         return $this->hasMany(Entrega::class, 'cliente_id');
-    }
-
-    public function empresa()
-    {
-        return $this->belongsTo(Empresa::class, 'empresa_id');
     }
 }

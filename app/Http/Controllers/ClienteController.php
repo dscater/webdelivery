@@ -13,6 +13,19 @@ use Illuminate\Support\Facades\Auth;
 
 class ClienteController extends Controller
 {
+    public $validacion = [
+        "nombre" => "required",
+        "paterno" => "required",
+        "ci" => "required|numeric|digits_between:1,10",
+        "ci_exp" => "required",
+        "dir" => "required",
+        "email" => "required|email|unique:clientes,email",
+        "fono" => "required|numeric|digits_between:1,10",
+        "cel" => "required|numeric|digits_between:1,10",
+    ];
+    public $mensajes = [];
+
+
     public function index(Request $request)
     {
         $texto = '';
@@ -59,6 +72,8 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate($this->validacion);
+
         $request['fecha_registro'] = date('Y-m-d');
         $request['tipo'] = 'CLIENTE';
         $cliente = new Cliente(array_map('mb_strtoupper', $request->all()));
@@ -71,28 +86,12 @@ class ClienteController extends Controller
             'CLIENTE' => 4001,
         ];
 
-        $ultimo_nro_user = User::where('tipo', $request->tipo)->where('nro_usuario', '!=', 0)->orderBy('nro_usuario', 'asc')->get()->last();
-        $nro_name = $numero_cliente[$request->tipo];
-        if ($ultimo_nro_user) {
-            $nro_name = (int)$ultimo_nro_user->nro_usuario + 1;
-        }
-
-        $nombre_cliente = $nro_name . $nombre_cliente;
-
-        $comprueba = User::where('name', $nombre_cliente)->get()->first();
-        $cont = 1;
-        while ($comprueba) {
-            $nombre_cliente = $nombre_cliente . $cont;
-            $comprueba = User::where('name', $nombre_cliente)->get()->first();
-            $cont++;
-        }
-
         $nuevo_usuario = new User();
-        $nuevo_usuario->name = $nombre_cliente;
+        $nuevo_usuario->name = $request->email;
         $nuevo_usuario->password = Hash::make($request->ci);
         $nuevo_usuario->tipo = $request->tipo;
         $nuevo_usuario->foto = 'user_default.png';
-        $nuevo_usuario->nro_usuario = $nro_name;
+        $nuevo_usuario->nro_usuario = 0;
         $nuevo_usuario->estado = 1;
         if ($request->hasFile('foto')) {
             //obtener el archivo
