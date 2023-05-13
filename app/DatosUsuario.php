@@ -14,6 +14,13 @@ class DatosUsuario extends Model
         'fecha_registro',
     ];
 
+    protected $appends = ["full_name"];
+
+    public function getFullNameAttribute()
+    {
+        return $this->nombre . ' ' . $this->paterno . ' ' . $this->materno;
+    }
+
     public function user()
     {
         return $this->belongsTo('app\User', 'user_id', 'id');

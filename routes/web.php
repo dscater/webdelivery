@@ -40,6 +40,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('users/edit/{usuario}', 'UserController@edit')->name('users.edit');
 
+    Route::post('users/update/reemplazar_password/{usuario}', 'UserController@reemplazar_password')->name('users.reemplazar_password');
+
     Route::put('users/update/{usuario}', 'UserController@update')->name('users.update');
 
     Route::delete('users/destroy/{user}', 'UserController@destroy')->name('users.destroy');

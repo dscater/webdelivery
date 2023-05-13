@@ -150,6 +150,14 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('bien', 'Registro eliminado correctamente');
     }
 
+    public function reemplazar_password(User $usuario, Request $request)
+    {
+        $usuario->password = Hash::make($request->password);
+        $usuario->save();
+        return response()->JSON([
+            "sw" => true
+        ]);
+    }
 
     public static function nombreUsuario($nom, $apep, $apem)
     {

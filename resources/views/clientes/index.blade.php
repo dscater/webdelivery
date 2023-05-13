@@ -63,15 +63,15 @@
 @section('scripts')
     <script>
         @if (session('bien'))
-            mensajeNotificacion('{{ session('bien') }}','success');
+            mensajeNotificacion('{{ session('bien') }}', 'success');
         @endif
 
         @if (session('info'))
-            mensajeNotificacion('{{ session('info') }}','info');
+            mensajeNotificacion('{{ session('info') }}', 'info');
         @endif
 
         @if (session('error'))
-            mensajeNotificacion('{{ session('error') }}','error');
+            mensajeNotificacion('{{ session('error') }}', 'error');
         @endif
 
         // ELIMINAR-NUEVO
@@ -106,6 +106,57 @@
                 success: function(response) {
                     $('#contenedorLista').html(response.html);
                 }
+            });
+        }
+
+        function reemplazarPassword(event, descripcion, url) {
+            event.preventDefault();
+            Swal.fire({
+                title: "Reemplazar contraseña",
+                html: "Usuario: <strong>" + descripcion + "</strong>",
+                input: "text",
+                inputPlaceholder: "Ingrese el nuevo valor aquí...",
+                showCancelButton: true,
+                confirmButtonColor: "#2E86C1",
+                confirmButtonText: "Guardar cambios",
+                cancelButtonText: "No, cancelar",
+                showLoaderOnConfirm: true,
+                preConfirm: (data) => {
+                    return $.ajax({
+                        headers: {
+                            "X-CSRF-TOKEN": $("#token").val()
+                        },
+                        type: "POST",
+                        url: url,
+                        data: {
+                            password: data
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.sw) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Actualización éxitosa",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Ocurrió un error",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+                            }
+                        },
+                        error: function(xhr, ajaxOptions, thrownError) {
+                            Swal.showValidationMessage(
+                                'Ocurrió un error al enviar el registro'
+                            )
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
             });
         }
     </script>

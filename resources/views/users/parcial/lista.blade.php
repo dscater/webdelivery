@@ -12,11 +12,13 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu1">
                                     <a href="{{ route('users.edit', $usuario->id) }}" class="dropdown-item"><i
-                                                class="fa fa-edit"></i>
-                                            Editar</a>
-                                    <a href="#" data-url="{{ route('users.destroy', $usuario->user->id) }}" data-info="{{$usuario->nombre}} {{$usuario->paterno}} {{$usuario->materno}}" data-toggle="modal"
-                                            data-target="#modal-eliminar" class="eliminar dropdown-item" ><i class="fa fa-trash"></i>
-                                            Eliminar</a>
+                                            class="fa fa-edit"></i>
+                                        Editar</a>
+                                    <a href="#" data-url="{{ route('users.destroy', $usuario->user->id) }}"
+                                        data-info="{{ $usuario->nombre }} {{ $usuario->paterno }} {{ $usuario->materno }}"
+                                        data-toggle="modal" data-target="#modal-eliminar"
+                                        class="eliminar dropdown-item"><i class="fa fa-trash"></i>
+                                        Eliminar</a>
                                 </div>
                             </div>
                         </div>
@@ -40,15 +42,18 @@
                             Usuario: {{ $usuario->user->name }}
                         </div>
                         <div class="ocupacion_cliente">
-                          {{$usuario->user->tipo}}
+                            {{ $usuario->user->tipo }}
                         </div>
+                        <button class="btn btn-xs text-sm btn-danger btn-block"
+                            onclick="reemplazarPassword(event,'{{ $usuario->full_name }}','{{ route('users.reemplazar_password', $usuario->user->id) }}')">Reemplazar
+                            contraseña</button>
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
 @else
-<div class="col-md-12">
-    NO SE ENCONTRARON REGISTROS
-</div>
+    <div class="col-md-12">
+        NO SE ENCONTRARON REGISTROS
+    </div>
 @endif
