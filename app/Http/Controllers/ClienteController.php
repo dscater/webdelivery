@@ -147,4 +147,36 @@ class ClienteController extends Controller
         $user->save();
         return redirect()->route('clientes.index')->with('bien', 'Registro eliminado correctamente');
     }
+
+    public function registrar_cliente(Request $request)
+    {
+        $request->validate($this->validacion);
+
+        $request['fecha_registro'] = date('Y-m-d');
+        $request['tipo'] = 'CLIENTE';
+        $cliente = new Cliente(array_map('mb_strtoupper', $request->all()));
+
+        $nuevo_usuario = new User();
+        $nuevo_usuario->name = $request->email;
+        $nuevo_usuario->password = Hash::make($request->ci);
+        $nuevo_usuario->tipo = $request->tipo;
+        $nuevo_usuario->foto = 'user_default.png';
+        $nuevo_usuario->nro_usuario = 0;
+        $nuevo_usuario->estado = 1;
+        if ($request->hasFile('foto')) {
+            //obtener el archivo
+            $file_foto = $request->file('foto');
+            $extension = "." . $file_foto->getClientOriginalExtension();
+            $nom_foto = $cliente->nombre . time() . $extension;
+            $file_foto->move(public_path() . "/imgs/users/", $nom_foto);
+            $nuevo_usuario->foto = $nom_foto;
+        }
+        $nuevo_usuario->save();
+        $nuevo_usuario->cliente()->save($cliente);
+
+        if (Auth::attempt(["name" => $nuevo_usuario->name, "password" => $cliente->ci])) {
+            return redirect()->route('home')->with('bien', 'Registro éxitoso');
+        }
+        return redirect()->back()->with('error', 'Algo salió mal por favor intente mas tarde');
+    }
 }

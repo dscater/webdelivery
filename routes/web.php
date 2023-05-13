@@ -21,7 +21,9 @@ Route::get('/clear-cache', function () {
     return 'Proceso realizado';
 });
 
+
 Route::get('/', 'Auth\LoginController@showLoginForm');
+Route::post('/registrar_cliente', 'ClienteController@registrar_cliente')->name("registrar_cliente");
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -125,7 +127,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('entregas/qr_pdf/{entrega}', 'EntregaController@qr_pdf')->name('entregas.qr_pdf');
 
     Route::get('entregas/g_info_entregas', 'EntregaController@g_info_entregas')->name('entregas.g_info_entregas');
-    
+
     // CLIENTES
     Route::get('clientes', 'ClienteController@index')->name('clientes.index');
 
@@ -157,9 +159,9 @@ Route::middleware(['auth'])->group(function () {
 
     // REPORTES
     Route::get('reportes', 'ReporteController@index')->name('reportes.index');
-    
+
     Route::get('reportes/usuarios', 'ReporteController@usuarios')->name('reportes.usuarios');
-    
+
     Route::get('reportes/ordens', 'ReporteController@ordens')->name('reportes.ordens');
 
     Route::get('reportes/entregas', 'ReporteController@entregas')->name('reportes.entregas');
