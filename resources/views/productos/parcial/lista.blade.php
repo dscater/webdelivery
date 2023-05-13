@@ -15,12 +15,17 @@
                                             class="fa fa-edit"></i>
                                         Editar</a>
                                     <a href="#" data-url="{{ route('productos.destroy', $producto->id) }}"
-                                        data-info="{{ $producto->nombre }}"
-                                        data-toggle="modal" data-target="#modal-eliminar"
-                                        class="eliminar dropdown-item"><i class="fa fa-trash"></i>
+                                        data-info="{{ $producto->nombre }}" data-toggle="modal"
+                                        data-target="#modal-eliminar" class="eliminar dropdown-item"><i
+                                            class="fa fa-trash"></i>
                                         Eliminar</a>
                                 </div>
                             </div>
+                        </div>
+                        <div class="foto_cliente">
+                            <a href="{{ route('productos.edit', $producto->id) }}" class="foto">
+                                <img src="{{ $producto->url_imagen }}" alt="Foto">
+                            </a>
                         </div>
                         <div class="nombre_cliente">
                             {{ $producto->nombre }}

@@ -1,18 +1,18 @@
 <div class="row">
-    @if(Auth::user()->tipo == 'EMPRESA')
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Empresa*</label>
-            {{ Form::select('empresa_id', [Auth::user()->datosUsuario->empresa_id=>Auth::user()->datosUsuario->empresa->nombre], null, ['class' => 'form-control', 'required']) }}
+    @if (Auth::user()->tipo == 'EMPRESA')
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Empresa*</label>
+                {{ Form::select('empresa_id', [Auth::user()->datosUsuario->empresa_id => Auth::user()->datosUsuario->empresa->nombre], null, ['class' => 'form-control', 'required']) }}
+            </div>
         </div>
-    </div>
     @else
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Empresa*</label>
-            {{ Form::select('empresa_id', $array_empresas, null, ['class' => 'form-control', 'required']) }}
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Empresa*</label>
+                {{ Form::select('empresa_id', $array_empresas, null, ['class' => 'form-control', 'required']) }}
+            </div>
         </div>
-    </div>
     @endif
     <div class="col-md-4">
         <div class="form-group">
@@ -32,7 +32,13 @@
     <div class="col-md-4">
         <div class="form-group">
             <label>Precio*</label>
-            {{ Form::number('precio', null, ['class' => 'form-control', 'required', 'step' => '0.01','min'=>'0.01']) }}
+            {{ Form::number('precio', null, ['class' => 'form-control', 'required', 'step' => '0.01', 'min' => '0.01']) }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Fotografía</label>
+            <input type="file" name="foto" class="form-control">
         </div>
     </div>
 </div>

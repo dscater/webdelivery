@@ -58,7 +58,14 @@ class ProductoController extends Controller
     {
         $request['fecha_registro'] = date('Y-m-d');
         $request['estado'] = 1;
-        Producto::create(array_map('mb_strtoupper', $request->all()));
+        $producto = Producto::create(array_map('mb_strtoupper', $request->except("foto")));
+        if ($request->hasFile("foto")) {
+            $file = $request->file("foto");
+            $nom_foto = time() . $producto->id . "." . $file->getClientOriginalExtension();
+            $producto->foto = $nom_foto;
+            $file->move(public_path() . "/imgs/productos", $nom_foto);
+        }
+        $producto->save();
         return redirect()->route('productos.index')->with('bien', 'Registro correcto');
     }
 
@@ -74,7 +81,18 @@ class ProductoController extends Controller
 
     public function update(Producto $producto, Request $request)
     {
-        $producto->update(array_map('mb_strtoupper', $request->all()));
+        $producto->update(array_map('mb_strtoupper', $request->except("foto")));
+
+        if ($request->hasFile("foto")) {
+            if ($producto->foto && $producto->foto != "default.png") {
+                \File::delete(public_path() . "/imgs/productos/" . $producto->foto);
+            }
+            $file = $request->file("foto");
+            $nom_foto = time() . $producto->id . "." . $file->getClientOriginalExtension();
+            $producto->foto = $nom_foto;
+            $file->move(public_path() . "/imgs/productos", $nom_foto);
+        }
+        $producto->save();
         return redirect()->route('productos.index')->with('bien', 'Registro modificado con éxito');
     }
 
