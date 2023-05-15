@@ -177,8 +177,7 @@ class EntregaController extends Controller
     public function pago_entrega(Entrega $entrega)
     {
         $usuario = $entrega->cliente->user;
-        if (Auth::attempt(["name" => $usuario->name])) {
-            
+        if (Auth::login($usuario)) {
             return view('pago', compact('entrega'));
         }
     }
