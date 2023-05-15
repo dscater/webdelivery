@@ -44,6 +44,31 @@ class ProductoController extends Controller
         return view('productos.index', compact('productos'));
     }
 
+    public function lista_empresas(Request $request)
+    {
+        $texto = $request->texto;
+        $empresa_id = $request->empresa_id;
+        $productos = Producto::select('productos.*')
+            ->join('empresas', 'empresas.id', '=', 'productos.empresa_id')
+            ->where('productos.estado', 1)
+            ->where(DB::raw('CONCAT(productos.nombre)'), 'LIKE', "%$texto%")
+            ->get();
+        if ($empresa_id != 'todos') {
+            $productos = Producto::select('productos.*')
+                ->join('empresas', 'empresas.id', '=', 'productos.empresa_id')
+                ->where('productos.estado', 1)
+                ->where('productos.empresa_id', $empresa_id)
+                ->where(DB::raw('CONCAT(productos.nombre)'), 'LIKE', "%$texto%")
+                ->get();
+        }
+
+        $html = view('productos.parcial.lista', compact('productos'))->render();
+        return response()->JSON([
+            'sw' => true,
+            'html' => $html
+        ]);
+    }
+
     public function create()
     {
         $empresas = Empresa::all();

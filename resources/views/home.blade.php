@@ -182,7 +182,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Empresa:</label>
-                                            <select class="form-control select2" name="empresa2">
+                                            <select class="form-control select2" name="empresa2"
+                                                onchange="listaProductosEmpresas();" id="select_empresa_busqueda">
                                                 <option value="todos">Todos</option>
                                                 @foreach ($empresas as $value)
                                                     <option value="{{ $value->id }}">{{ $value->nombre }}</option>
@@ -191,7 +192,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Buscar producto</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" id="texto_busqueda"
+                                                onkeyup="listaProductosEmpresas();">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -245,6 +247,8 @@
     <input type="hidden" value="{{ route('pagos.g_info_ingresos') }}" id="urlGIngresos">
     <input type="hidden" value="{{ route('entregas.g_info_entregas') }}" id="urlGEntregas">
     <input type="hidden" value="{{ route('ordens.store') }}" id="urlRegistraOrden">
+    <input type="hidden" value="{{ route('productos.lista_empresas') }}" id="urlListaProductosEmpresas">
+
 @endsection
 
 @section('scripts')
@@ -294,7 +298,7 @@
             let contenedorCarrito = $("#contenedorCarrito");
             let btnRegistraOrden = $("#btnRegistraOrden");
             $(document).ready(function() {
-                listarProductos();
+                listarProductosCarrito();
                 contenedorLista.on("click", ".agregarProducto", function() {
                     let producto_id = $(this).attr("data-id");
                     let precio = parseFloat($(this).attr("data-precio"));
@@ -330,7 +334,7 @@
                                 precio: precio.toFixed(2),
                                 subtotal: subtotal
                             });
-                            listarProductos();
+                            listarProductosCarrito();
                             mensajeNotificacion('Producto agregado', 'success');
                         }
                     });
@@ -339,10 +343,12 @@
                 contenedorCarrito.on("click", "tr.fila td.accion button", function() {
                     let fila = $(this).parents("tr.fila");
                     oCarrito.productos.splice(fila.attr("data-index"), 1);
-                    listarProductos();
+                    listarProductosCarrito();
                 });
                 btnRegistraOrden.click(registrarOrden);
             });
+
+
 
             function registrarOrden() {
                 if (oCarrito.productos.length > 0) {
@@ -351,11 +357,18 @@
                             "X-CSRF-TOKEN": $("#token").val()
                         },
                         type: "POST",
-                        url: $("urlRegistraOrden").val(),
+                        url: $("#urlRegistraOrden").val(),
                         data: oCarrito,
                         dataType: "json",
                         success: function(response) {
-                            console.log(response);
+                            Swal.fire({
+                                icon: "success",
+                                title: response.message,
+                                html: "Su nro. de orden es: " + response.orden.nro_orden,
+                                showConfirmButton: false,
+                            });
+                            oCarrito.productos = [];
+                            listarProductosCarrito();
                         }
                     });
                 } else {
@@ -367,7 +380,23 @@
                 }
             }
 
-            function listarProductos() {
+            function listaProductosEmpresas() {
+                console.log("asda");
+                $.ajax({
+                    type: "GET",
+                    url: $("#urlListaProductosEmpresas").val(),
+                    data: {
+                        texto: $("#texto_busqueda").val(),
+                        empresa_id: $("#select_empresa_busqueda").val()
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        contenedorLista.html(response.html);
+                    }
+                });
+            }
+
+            function listarProductosCarrito() {
                 contenedorCarrito.html("");
                 if (oCarrito.productos.length > 0) {
                     let contador = 1;

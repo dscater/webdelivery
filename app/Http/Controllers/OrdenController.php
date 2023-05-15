@@ -120,18 +120,60 @@ class OrdenController extends Controller
 
     public function store(Request $request)
     {
-        $request['fecha_registro'] = date('Y-m-d');
-        $request['fecha_hora_pedido'] = date('Y-m-d H:i', strtotime($request->fecha_pedido . ' ' . $request->hora_pedido));
-        $request['fecha_hora_entrega'] = date('Y-m-d H:i', strtotime($request->fecha_entrega . ' ' . $request->hora_entrega));
-        $request['estado'] = 'PENDIENTE';
-        $request['status'] = 1;
-        $ultimo_registro = Orden::where('status', 1)->orderBy('nro_orden', 'asc')->get()->last();
-        $request['nro_orden'] = 1;
-        if ($ultimo_registro) {
-            $request['nro_orden'] = (int)$ultimo_registro->nro_orden + 1;
+        DB::beginTransaction();
+        try {
+            $fecha_atual = date("Y-m-d");
+            $hora_atual = date("H:i:s");
+            $nro_orden = 1;
+            $ultimo_registro = Orden::where('status', 1)->orderBy('nro_orden', 'asc')->get()->last();
+            if ($ultimo_registro) {
+                $nro_orden = (int)$ultimo_registro->nro_orden + 1;
+            }
+
+            $datos_orden = [
+                "nro_orden" => $nro_orden,
+                "cliente_id" => $request->cliente["id"],
+                "fecha_pedido" => $fecha_atual,
+                "hora_pedido" => $hora_atual,
+                "fecha_hora_pedido" => date('Y-m-d H:i', strtotime($fecha_atual . ' ' . $hora_atual)),
+                "total" => $request->total,
+                "estado" => "PENDIENTE",
+                "fecha_registro" => $fecha_atual,
+                "status" => 1
+            ];
+
+            $nueva_orden = Orden::create(array_map('mb_strtoupper', $datos_orden));
+
+            $lista_productos = $request->productos;
+            $total = 0;
+            foreach ($lista_productos as $lp) {
+                $producto = Producto::find($lp["id"]);
+                $subtotal = (float)$producto->precio * (float)$lp["cantidad"];
+                $nueva_orden->detalle_ordens()->create([
+                    "producto_id" => $producto->id,
+                    "precio" => $producto->precio,
+                    "cantidad" => $lp["cantidad"],
+                    "subtotal" => $subtotal
+                ]);
+                $total += $subtotal;
+            }
+            $nueva_orden->total = $total;
+            $nueva_orden->save();
+            DB::commit();
+            return response()->JSON([
+                "sw" => true,
+                "message" => "Registro realizado con éxito",
+                "orden" => $nueva_orden
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->JSON([
+                "sw" => false,
+                "message" => $e->getMessage()
+            ], 500);
         }
-        Orden::create(array_map('mb_strtoupper', $request->all()));
-        return redirect()->route('ordens.index')->with('bien', 'Registro realizado con éxito');
+
+        // return redirect()->route('ordens.index')->with('bien', 'Registro realizado con éxito');
     }
 
     public function edit(Orden $orden)

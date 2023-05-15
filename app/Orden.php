@@ -9,7 +9,7 @@ class Orden extends Model
     protected $fillable = [
         'nro_orden', 'cliente_id', 'distribuidor_id', 'fecha_pedido', 'hora_pedido',
         'fecha_hora_pedido', 'fecha_entrega', 'hora_entrega',
-        'fecha_hora_entrega', 'estado', 'fecha_registro', 'status'
+        'fecha_hora_entrega','total', 'estado', 'fecha_registro', 'status'
     ];
 
     public function empresa()

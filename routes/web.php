@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::POST('users/configurar/cuenta/update/foto/{user}', 'UserController@cuenta_update_foto')->name('users.config_update_foto');
 
     // PRODUCTOS
+    Route::get('productos/lista_empresas', 'ProductoController@lista_empresas')->name('productos.lista_empresas');
+
     Route::get('productos', 'ProductoController@index')->name('productos.index');
 
     Route::get('productos/create', 'ProductoController@create')->name('productos.create');
