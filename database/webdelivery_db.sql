@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 13-05-2023 a las 15:33:14
+-- Tiempo de generación: 15-05-2023 a las 16:30:48
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 7.4.19
 
@@ -89,9 +89,27 @@ INSERT INTO `datos_usuarios` (`id`, `nombre`, `paterno`, `materno`, `ci`, `ci_ex
 (1, 'JUAN', 'PERES', '', '111', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314568', '78945612', '6666666', NULL, NULL, 2, '2021-07-19', '2021-07-19 16:00:38', '2021-07-19 16:00:38'),
 (2, 'FERNANDO', 'CHOQUE', '', '222', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314568', '78945612', '6666666', 1, NULL, 3, '2021-07-19', '2021-07-19 16:00:54', '2021-07-19 16:00:54'),
 (3, 'MARIA', 'QUISPE', '', '333', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314568', '78945612', '6666666', NULL, 1, 4, '2021-07-19', '2021-07-19 16:01:11', '2021-07-19 16:01:11'),
-(4, 'ALBERTO', 'MACHACA', '', '123', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314568', '78945612', '6666666', 2, NULL, 5, '2021-07-19', '2021-07-19 16:01:31', '2021-07-19 16:01:31'),
+(4, 'ALBERTO', 'MACHACA', '', '123', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314568', '78945612', '6666666', 2, NULL, 5, '2021-07-19', '2021-07-19 16:01:31', '2023-05-15 14:16:52'),
 (5, 'MARIO', 'CHURQUI', '', '1234', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314567', '78945612', '6666666', 4, NULL, 6, '2021-07-19', '2021-07-19 16:01:51', '2021-07-19 16:01:51'),
-(6, 'FERNANDO', 'CONDORI', '', '12345', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314568', '78945612', '6666666', NULL, 2, 7, '2021-07-19', '2021-07-19 16:02:08', '2021-07-19 16:02:08');
+(6, 'FERNANDO', 'CONDORI', '', '12345', 'LP', 'ZONA LOS OLIVOS CALLE 3 #333', '', '21314568', '78945612', '6666666', NULL, 2, 7, '2021-07-19', '2021-07-19 16:02:08', '2021-07-19 16:02:08'),
+(7, 'MARCELO', 'BERNAVE', '', '55555', 'LP', 'LOS OLIVOS', '', '2222222', '7777777', '222222', NULL, NULL, 13, '2023-05-15', '2023-05-15 14:16:41', '2023-05-15 14:16:41');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalle_ordens`
+--
+
+CREATE TABLE `detalle_ordens` (
+  `id` bigint UNSIGNED NOT NULL,
+  `orden_id` bigint UNSIGNED NOT NULL,
+  `producto_id` bigint UNSIGNED NOT NULL,
+  `precio` decimal(24,2) NOT NULL,
+  `cantidad` double NOT NULL,
+  `subtotal` decimal(8,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -195,7 +213,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (19, '2021_07_09_104626_create_entregas_table', 1),
 (20, '2021_07_09_104707_create_pagos_table', 1),
 (21, '2020_11_11_164631_create_empresas_table', 2),
-(22, '2020_11_11_164630_create_distribuidors_table', 3);
+(22, '2020_11_11_164630_create_distribuidors_table', 3),
+(23, '2023_05_15_121218_create_detalle_ordens_table', 4);
 
 -- --------------------------------------------------------
 
@@ -206,17 +225,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 CREATE TABLE `ordens` (
   `id` bigint UNSIGNED NOT NULL,
   `nro_orden` bigint NOT NULL,
-  `empresa_id` bigint UNSIGNED NOT NULL,
-  `producto_id` bigint UNSIGNED NOT NULL,
-  `cantidad` double(8,2) NOT NULL,
   `cliente_id` bigint UNSIGNED NOT NULL,
-  `distribuidor_id` bigint UNSIGNED NOT NULL,
+  `distribuidor_id` bigint UNSIGNED DEFAULT NULL,
   `fecha_pedido` date NOT NULL,
   `hora_pedido` time NOT NULL,
   `fecha_hora_pedido` datetime NOT NULL,
-  `fecha_entrega` date NOT NULL,
-  `hora_entrega` time NOT NULL,
-  `fecha_hora_entrega` datetime NOT NULL,
+  `fecha_entrega` date DEFAULT NULL,
+  `hora_entrega` time DEFAULT NULL,
+  `fecha_hora_entrega` datetime DEFAULT NULL,
   `estado` varchar(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fecha_registro` date NOT NULL,
   `status` int NOT NULL,
@@ -228,9 +244,9 @@ CREATE TABLE `ordens` (
 -- Volcado de datos para la tabla `ordens`
 --
 
-INSERT INTO `ordens` (`id`, `nro_orden`, `empresa_id`, `producto_id`, `cantidad`, `cliente_id`, `distribuidor_id`, `fecha_pedido`, `hora_pedido`, `fecha_hora_pedido`, `fecha_entrega`, `hora_entrega`, `fecha_hora_entrega`, `estado`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 5.00, 3, 7, '2021-07-19', '12:17:00', '2021-07-19 12:17:00', '2021-07-19', '12:17:00', '2021-07-19 12:17:00', 'ENTREGADO', '2021-07-19', 1, '2021-07-19 16:17:39', '2021-07-19 16:19:56'),
-(2, 2, 1, 1, 5.00, 3, 4, '2023-05-08', '14:47:00', '2023-05-08 14:47:00', '2023-05-08', '15:30:00', '2023-05-08 15:30:00', 'ENVIO PENDIENTE', '2023-05-08', 1, '2023-05-08 18:48:19', '2023-05-08 18:59:25');
+INSERT INTO `ordens` (`id`, `nro_orden`, `cliente_id`, `distribuidor_id`, `fecha_pedido`, `hora_pedido`, `fecha_hora_pedido`, `fecha_entrega`, `hora_entrega`, `fecha_hora_entrega`, `estado`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 7, '2021-07-19', '12:17:00', '2021-07-19 12:17:00', '2021-07-19', '12:17:00', '2021-07-19 12:17:00', 'ENTREGADO', '2021-07-19', 1, '2021-07-19 16:17:39', '2021-07-19 16:19:56'),
+(2, 2, 3, 4, '2023-05-08', '14:47:00', '2023-05-08 14:47:00', '2023-05-08', '15:30:00', '2023-05-08 15:30:00', 'ENVIO PENDIENTE', '2023-05-08', 1, '2023-05-08 18:48:19', '2023-05-08 18:59:25');
 
 -- --------------------------------------------------------
 
@@ -357,7 +373,8 @@ INSERT INTO `users` (`id`, `name`, `password`, `tipo`, `foto`, `nro_usuario`, `e
 (9, '4002CM', '$2y$10$vV6ehgTUQRjC5rMI0zXPp.3ZHFdEHz/nsJZWFPXtxeFE53MpxQOrq', 'CLIENTE', 'user_default.png', 4002, 1, '2021-07-19 16:06:08', '2023-05-13 15:11:31'),
 (10, '4003CG', '$2y$10$WHlSO/CjTs8YY95qI6NR1.FXC4TE8dgqHGkMwOa4OssybOAQMuFhC', 'CLIENTE', 'user_default.png', 4003, 1, '2021-07-19 16:07:04', '2021-07-19 16:07:04'),
 (11, 'jose@gmail.com', '$2y$10$8YzSMneGzf2D4T6JXSDYCuWP6lW8Mpca4eS68wtUPLoi/8xZAF.ay', 'CLIENTE', 'user_default.png', 0, 1, '2023-05-13 14:28:28', '2023-05-13 14:28:28'),
-(12, 'marcelo@gmail.com', '$2y$10$cB2xsJrk3nnEKBbiR2JYiuwo/2.K/SqRmJjaXoMMDVWSf4Ni21tCu', 'CLIENTE', 'user_default.png', 0, 1, '2023-05-13 14:51:11', '2023-05-13 14:51:11');
+(12, 'marcelo@gmail.com', '$2y$10$cB2xsJrk3nnEKBbiR2JYiuwo/2.K/SqRmJjaXoMMDVWSf4Ni21tCu', 'CLIENTE', 'user_default.png', 0, 1, '2023-05-13 14:51:11', '2023-05-13 14:51:11'),
+(13, '2004MB', '$2y$10$rURfMv8o7BeyEvBgdVCWlu/u2dyvElsjOYAZF9qViWd.LX2I/kw1u', 'EMPRESA', 'MARCELO1684160201.jpg', 2004, 1, '2023-05-15 14:16:41', '2023-05-15 14:16:41');
 
 --
 -- Índices para tablas volcadas
@@ -376,6 +393,13 @@ ALTER TABLE `clientes`
 ALTER TABLE `datos_usuarios`
   ADD PRIMARY KEY (`id`),
   ADD KEY `datos_usuarios_user_id_foreign` (`user_id`);
+
+--
+-- Indices de la tabla `detalle_ordens`
+--
+ALTER TABLE `detalle_ordens`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `detalle_ordens_orden_id_foreign` (`orden_id`);
 
 --
 -- Indices de la tabla `distribuidors`
@@ -408,8 +432,6 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `ordens`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `ordens_empresa_id_foreign` (`empresa_id`),
-  ADD KEY `ordens_producto_id_foreign` (`producto_id`),
   ADD KEY `ordens_cliente_id_foreign` (`cliente_id`);
 
 --
@@ -451,7 +473,13 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `datos_usuarios`
 --
 ALTER TABLE `datos_usuarios`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `detalle_ordens`
+--
+ALTER TABLE `detalle_ordens`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `distribuidors`
@@ -475,7 +503,7 @@ ALTER TABLE `entregas`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `ordens`
@@ -505,7 +533,7 @@ ALTER TABLE `razon_socials`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Restricciones para tablas volcadas
@@ -524,6 +552,12 @@ ALTER TABLE `datos_usuarios`
   ADD CONSTRAINT `datos_usuarios_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
+-- Filtros para la tabla `detalle_ordens`
+--
+ALTER TABLE `detalle_ordens`
+  ADD CONSTRAINT `detalle_ordens_orden_id_foreign` FOREIGN KEY (`orden_id`) REFERENCES `ordens` (`id`) ON DELETE CASCADE;
+
+--
 -- Filtros para la tabla `entregas`
 --
 ALTER TABLE `entregas`
@@ -534,8 +568,7 @@ ALTER TABLE `entregas`
 -- Filtros para la tabla `ordens`
 --
 ALTER TABLE `ordens`
-  ADD CONSTRAINT `ordens_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
-  ADD CONSTRAINT `ordens_producto_id_foreign` FOREIGN KEY (`producto_id`) REFERENCES `productos` (`id`);
+  ADD CONSTRAINT `ordens_cliente_id_foreign` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
 
 --
 -- Filtros para la tabla `pagos`
