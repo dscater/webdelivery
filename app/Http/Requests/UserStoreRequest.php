@@ -24,7 +24,15 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'ci' => 'unique:datos_usuarios,ci'
+            "nombre" => "required",
+            "paterno" => "required",
+            "ci" => "required|unique:datos_usuarios,ci|numeric|digits_between:1,10",
+            "ci_exp" => "required",
+            "dir" => "required",
+            "fono" => "required|numeric|digits_between:1,10",
+            "fono_referencia" => "required",
+            "cel" => "required|numeric|digits_between:1,10",
+            "tipo" => "required",
         ];
     }
 
