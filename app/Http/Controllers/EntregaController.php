@@ -145,17 +145,13 @@ class EntregaController extends Controller
                 ->get();
         }
 
-        $array_ordens[''] = 'Seleccione...';
-        foreach ($ordens as $value) {
-            $array_ordens[$value->id] = 'Orden nro. ' . $value->nro_orden . ' | ' . $value->producto->nombre . ' (' . $value->cantidad . ') | ' . 'Empresa ' . $value->empresa->nombre . ' | ' . 'Distribuidor ' . $value->distribuidor->nombre;
-        }
-
-        return view('entregas.edit', compact('entrega', 'array_clientes', 'array_ordens'));
+        return view('entregas.edit', compact('entrega', 'array_clientes'));
     }
 
     public function update(Entrega $entrega, Request $request)
     {
         $entrega->update(array_map('mb_strtoupper', $request->all()));
+        $entrega->orden->update(array_map('mb_strtoupper', $request->all()));
         return redirect()->route('entregas.index')->with('bien', 'Registro modificado con éxito');
     }
 
@@ -166,14 +162,25 @@ class EntregaController extends Controller
 
     public function destroy(Entrega $entrega)
     {
-        $entrega->status = 0;
-        $entrega->save();
+        $entrega->orden->update([
+            "fecha_entrega" => null,
+            "hora_entrega" => null,
+            "fecha_hora_entrega" => null,
+            "distribuidor_id" => null,
+            "estado" => "PENDIENTE"
+        ]);
+        \File::delete(public_path() . "/imgs/qr/" . $entrega->qr);
+        $entrega->delete();
         return redirect()->route('entregas.index')->with('bien', 'Registro eliminado correctamente');
     }
 
     public function pago_entrega(Entrega $entrega)
     {
-        return view('pago', compact('entrega'));
+        $usuario = $entrega->cliente->user;
+        if (Auth::attempt(["name" => $usuario->name])) {
+            
+            return view('pago', compact('entrega'));
+        }
     }
 
     public function qr_pdf(Entrega $entrega)

@@ -23,12 +23,12 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
+                {{-- <div class="col-md-12">
                     <a href="{{ route('entregas.create') }}" class="btn btn-primary">
                         <i class="fa fa-plus"></i>
                         <span>Registrar</span>
                     </a>
-                </div>
+                </div> --}}
                 <div class="col-md-4" style="margin-top:5px;">
                     <div class="panel panel-default">
                         <div class="row">

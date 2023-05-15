@@ -143,11 +143,10 @@
             width: 120px;
         }
 
-        .info_entrega{
+        .info_entrega {
             margin-top: 0px;
             width: 300px;
         }
-
     </style>
 </head>
 
@@ -171,22 +170,52 @@
         </tr>
         <tr>
             <td width="30%">Distribuidor:</td>
-            <td>{{ $entrega->orden->distribuidor->datosUsuario->nombre}} {{ $entrega->orden->distribuidor->datosUsuario->paterno}} {{ $entrega->orden->distribuidor->datosUsuario->materno}} - "{{ $entrega->orden->distribuidor->datosUsuario->distribuidor->nombre}}"
+            <td>{{ $entrega->orden->distribuidor->datosUsuario->nombre }}
+                {{ $entrega->orden->distribuidor->datosUsuario->paterno }}
+                {{ $entrega->orden->distribuidor->datosUsuario->materno }} -
+                "{{ $entrega->orden->distribuidor->datosUsuario->distribuidor->nombre }}"
             </td>
-        </tr>
-        <tr>
-            <td>Producto / Cantidad:</td>
-            <td>{{ $entrega->orden->producto->nombre }} / {{ $entrega->orden->cantidad }} </td>
         </tr>
         <tr>
             <td>Fecha Hora Entrega:</td>
             <td>{{ date('d/m/Y H:i', strtotime($entrega->fecha_hora_entrega)) }}</td>
         </tr>
-        <tr>
-            <td colspan="2" class="centreado img_celda">
-                <img src="{{asset('imgs/qr/'.$entrega->qr)}}" alt="QR">
-            </td>
-        </tr>
+    </table>
+    <table class="info_entrega" border="1" style="margin-top:-2px;">
+        <thead>
+            <tr>
+                <th width="4.5%">#</th>
+                <th>Producto</th>
+                <th>Empresa</th>
+                <th>C/U</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $cont = 1;
+            @endphp
+            @foreach ($entrega->orden->detalle_ordens as $do)
+                <tr>
+                    <td>{{ $cont++ }}</td>
+                    <td>{{ $do->producto->nombre }}</td>
+                    <td>{{ $do->producto->empresa->nombre }}</td>
+                    <td>{{ $do->precio }}</td>
+                    <td>{{ $do->cantidad }}</td>
+                    <td>{{ $do->subtotal }}</td>
+                </tr>
+            @endforeach
+            <tr>
+                <td colspan="5" class="text-lg font-weight-bold">TOTAL</td>
+                <td class="text-lg font-weight-bold">{{ $entrega->orden->total }}</td>
+            </tr>
+            <tr>
+                <td colspan="6" class="centreado img_celda">
+                    <img src="{{ asset('imgs/qr/' . $entrega->qr) }}" alt="QR">
+                </td>
+            </tr>
+        </tbody>
     </table>
 </body>
 

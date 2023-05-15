@@ -27,6 +27,7 @@ Route::post('/registrar_cliente', 'ClienteController@registrar_cliente')->name("
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('entregas/calificacion/{entrega}', 'EntregaController@calificacion')->name('entregas.calificacion');
 Route::get('entregas/pago_entrega/{entrega}', 'EntregaController@pago_entrega')->name('entregas.pago_entrega');
 
 Route::middleware(['auth'])->group(function () {
@@ -80,6 +81,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('ordens/store', 'OrdenController@store')->name('ordens.store');
 
     Route::get('ordens/edit/{orden}', 'OrdenController@edit')->name('ordens.edit');
+
+    Route::get('ordens/show/{orden}', 'OrdenController@show')->name('ordens.show');
+
+    Route::post('ordens/actualizarOrden/{orden}', 'OrdenController@actualizarOrden')->name('ordens.actualizarOrden');
 
     Route::put('ordens/update/{orden}', 'OrdenController@update')->name('ordens.update');
 

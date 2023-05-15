@@ -162,6 +162,9 @@
                         @if (Auth::user()->tipo == 'DISTRIBUIDOR')
                             @include('includes.menu.menu_distribuidor')
                         @endif
+                        @if (Auth::user()->tipo == 'CLIENTE')
+                            @include('includes.menu.menu_cliente')
+                        @endif
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

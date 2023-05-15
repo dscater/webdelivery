@@ -33,7 +33,7 @@
                         {!! Form::model($orden, ['route' => ['ordens.update', $orden->id], 'method' => 'put', 'files' => true]) !!}
                         <div class="card-body">
                             @include('ordens.form.form')
-                            <button class="btn btn-info"><i class="fa fa-update"></i> ACTUALIZAR</button>
+                            <button class="btn btn-primary">CONFIRMAR ORDEN</button>
                         </div>
                         {!! Form::close() !!}
                         <!-- /.card-body -->
@@ -48,5 +48,8 @@
     <input type="hidden" value="{{ route('empresas.productos') }}" id="urlProductos">
 @endsection
 @section('scripts')
-    <script src="{{ asset('js/ordens/create.js') }}"></script>
+    {{-- <script src="{{ asset('js/ordens/create.js') }}"></script> --}}
+    <script>
+        
+    </script>
 @endsection

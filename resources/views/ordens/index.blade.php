@@ -35,7 +35,7 @@
                     <div class="panel panel-default">
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="text" id="txtBusca" class="form-control" placeholder="Nombre Cliente...">
+                                <input type="text" id="txtBusca" class="form-control" placeholder="Buscar...">
                             </div>
                         </div>
                     </div>

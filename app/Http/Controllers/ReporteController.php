@@ -99,7 +99,7 @@ class ReporteController extends Controller
             }
             if ($estado != 'todos') {
                 if ($estado == 'PENDIENTE') {
-                    $ordens->whereIn('estado', ['PENDIENTE','ENVIO PENDIENTE']);
+                    $ordens->whereIn('estado', ['PENDIENTE','EN CAMINO']);
                 } else {
                     $ordens->where('estado', $estado);
                 }

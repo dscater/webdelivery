@@ -34,12 +34,6 @@
                             {{ $entrega->orden->cliente->nombre }} {{ $entrega->orden->cliente->paterno }}
                             {{ $entrega->orden->cliente->materno }}
                         </div>
-                        <div class="ci_cliente">
-                            {{ $entrega->orden->producto->nombre }} - "{{ $entrega->orden->empresa->nombre }}"
-                        </div>
-                        <div class="ci_cliente">
-                            Cantidad: {{ $entrega->orden->cantidad }}
-                        </div>
                         <div class="ocupacion_cliente">
                             Entrega: {{ date('d/m/Y H:i', strtotime($entrega->fecha_hora_entrega)) }}
                         </div>
@@ -49,8 +43,11 @@
                         <div class="ocupacion_cliente">
                             @php
                                 $estado = 'entregado';
-                                if ($entrega->estado != 'ENTREGADO') {
+                                if ($entrega->orden->estado == 'PENDIENTE') {
                                     $estado = 'pendiente';
+                                }
+                                if ($entrega->orden->estado == 'EN CAMINO') {
+                                    $estado = 'en_camino';
                                 }
                             @endphp
                             <button class="btn btn-sm {{$estado}}">{{ $entrega->estado }}</button>

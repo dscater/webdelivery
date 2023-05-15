@@ -691,10 +691,14 @@ li.no {
     color: white;
     background: rgb(165, 42, 42);
 }
+.en_camino {
+    color: black;
+    background: rgb(253, 219, 1);
+}
 /* LISTA REGISTROS */
 .contenedorLista{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 10px;
 }
 
