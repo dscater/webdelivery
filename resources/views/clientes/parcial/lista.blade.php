@@ -35,6 +35,9 @@
                         <div class="ci_cliente">
                             {{ $cliente->ci }} {{ $cliente->ci_exp }}
                         </div>
+                        <div class="ci_cliente">
+                            {{ $cliente->user->name }}
+                        </div>
                         <div class="ocupacion_cliente">
                             <button class="btn btn-xs text-sm btn-danger btn-block"
                                 onclick="reemplazarPassword(event,'{{ $cliente->full_name }}','{{ route('users.reemplazar_password', $cliente->user->id) }}')">Reemplazar
