@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Orden extends Model
 {
     protected $fillable = [
-        'nro_orden', 'empresa_id', 'producto_id', 'cantidad',
-        'cliente_id', 'distribuidor_id', 'fecha_pedido', 'hora_pedido',
+        'nro_orden', 'cliente_id', 'distribuidor_id', 'fecha_pedido', 'hora_pedido',
         'fecha_hora_pedido', 'fecha_entrega', 'hora_entrega',
         'fecha_hora_entrega', 'estado', 'fecha_registro', 'status'
     ];
@@ -36,5 +35,10 @@ class Orden extends Model
     public function entrega()
     {
         return $this->hasOne(Entrega::class, 'orden_id');
+    }
+
+    public function detalle_ordens()
+    {
+        return $this->hasMany(DetalleOrden::class, 'orden_id');
     }
 }

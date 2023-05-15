@@ -1,6 +1,6 @@
 @if (count($ordens) > 0)
     @foreach ($ordens as $orden)
-        <div class="col-md-2">
+        <div class="elemento_lista">
             <div class="card">
                 <div class="card-body">
                     <div class="contenedor_cliente">
@@ -48,7 +48,7 @@
                                     $estado = 'pendiente';
                                 }
                             @endphp
-                            <button class="btn btn-sm {{$estado}}">{{ $orden->estado }}</button>
+                            <button class="btn btn-sm btn-block btn-flat {{$estado}}">{{ $orden->estado }}</button>
                         </div>
                     </div>
                 </div>

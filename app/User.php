@@ -29,7 +29,10 @@ class User extends Authenticatable
         if ($this->tipo == 'CLIENTE') {
             return $this->cliente->nombre . ' ' . $this->cliente->paterno . ' ' . $this->cliente->materno;
         }
-        return $this->datosUsuario->nombre . ' ' . $this->datosUsuario->paterno . ' ' . $this->datosUsuario->materno;
+        if ($this->datosUsuario) {
+            return $this->datosUsuario->nombre . ' ' . $this->datosUsuario->paterno . ' ' . $this->datosUsuario->materno;
+        }
+        return $this->name;
     }
 
     public function datosUsuario()

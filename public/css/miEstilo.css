@@ -691,3 +691,14 @@ li.no {
     color: white;
     background: rgb(165, 42, 42);
 }
+/* LISTA REGISTROS */
+.contenedorLista{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.max50vh{
+    height: 50vh;
+    overflow: auto;
+}

@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="row mt-3" id="contenedorLista">
+            <div class="row mt-3 contenedorLista" id="contenedorLista">
                 @include('productos.parcial.lista')
             </div>
         </div>

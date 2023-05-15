@@ -23,13 +23,13 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                @if(Auth::user()->tipo != 'DISTRIBUIDOR')
-                <div class="col-md-12">
-                    <a href="{{ route('ordens.create') }}" class="btn btn-primary">
-                        <i class="fa fa-plus"></i>
-                        <span>Registrar</span>
-                    </a>
-                </div>
+                @if (Auth::user()->tipo != 'DISTRIBUIDOR')
+                    {{-- <div class="col-md-12">
+                        <a href="{{ route('ordens.create') }}" class="btn btn-primary">
+                            <i class="fa fa-plus"></i>
+                            <span>Registrar</span>
+                        </a>
+                    </div> --}}
                 @endif
                 <div class="col-md-4" style="margin-top:5px;">
                     <div class="panel panel-default">
@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <div class="row mt-3" id="contenedorLista">
+            <div class="row mt-3 contenedorLista" id="contenedorLista">
                 @include('ordens.parcial.lista')
             </div>
         </div>
@@ -64,15 +64,15 @@
 @section('scripts')
     <script>
         @if (session('bien'))
-            mensajeNotificacion('{{ session('bien') }}','success');
+            mensajeNotificacion('{{ session('bien') }}', 'success');
         @endif
 
         @if (session('info'))
-            mensajeNotificacion('{{ session('info') }}','info');
+            mensajeNotificacion('{{ session('info') }}', 'info');
         @endif
 
         @if (session('error'))
-            mensajeNotificacion('{{ session('error') }}','error');
+            mensajeNotificacion('{{ session('error') }}', 'error');
         @endif
 
         // ELIMINAR-NUEVO
