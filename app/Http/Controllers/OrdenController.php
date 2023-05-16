@@ -160,6 +160,7 @@ class OrdenController extends Controller
                 $producto = Producto::find($lp["producto_id"]);
                 $subtotal = (float)$producto->precio * (float)$lp["cantidad"];
                 $nueva_orden->detalle_ordens()->create([
+                    "empresa_id" => $producto->empresa_id,
                     "producto_id" => $producto->id,
                     "precio" => $producto->precio,
                     "cantidad" => $lp["cantidad"],
@@ -298,17 +299,18 @@ class OrdenController extends Controller
             $lista_productos = $request->productos;
             $total = 0;
             foreach ($lista_productos as $lp) {
+                $producto = Producto::find($lp["producto_id"]);
+                $subtotal = (float)$producto->precio * (float)$lp["cantidad"];
                 if ($lp["id"] == 0) {
-                    $producto = Producto::find($lp["producto_id"]);
-                    $subtotal = (float)$producto->precio * (float)$lp["cantidad"];
                     $orden->detalle_ordens()->create([
+                        "empresa_id" => $producto->empresa_id,
                         "producto_id" => $producto->id,
                         "precio" => $producto->precio,
                         "cantidad" => $lp["cantidad"],
                         "subtotal" => $subtotal
                     ]);
-                    $total += $subtotal;
                 }
+                $total += $subtotal;
             }
             $orden->total = $total;
             $orden->save();

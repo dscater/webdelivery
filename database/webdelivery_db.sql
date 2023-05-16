@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 15-05-2023 a las 16:30:48
+-- Tiempo de generación: 16-05-2023 a las 20:35:32
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 7.4.19
 
@@ -103,6 +103,8 @@ INSERT INTO `datos_usuarios` (`id`, `nombre`, `paterno`, `materno`, `ci`, `ci_ex
 CREATE TABLE `detalle_ordens` (
   `id` bigint UNSIGNED NOT NULL,
   `orden_id` bigint UNSIGNED NOT NULL,
+  `empresa_id` bigint UNSIGNED NOT NULL,
+  `entrega_id` bigint UNSIGNED DEFAULT NULL,
   `producto_id` bigint UNSIGNED NOT NULL,
   `precio` decimal(24,2) NOT NULL,
   `cantidad` double NOT NULL,
@@ -110,6 +112,17 @@ CREATE TABLE `detalle_ordens` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `detalle_ordens`
+--
+
+INSERT INTO `detalle_ordens` (`id`, `orden_id`, `empresa_id`, `entrega_id`, `producto_id`, `precio`, `cantidad`, `subtotal`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 1, 15.00, 2, 30.00, '2023-05-16 19:54:09', '2023-05-16 19:54:09'),
+(3, 1, 2, 1, 3, 15.00, 5, 75.00, '2023-05-16 19:57:24', '2023-05-16 19:57:24'),
+(4, 2, 4, 2, 4, 17.50, 20, 350.00, '2023-05-16 20:31:12', '2023-05-16 20:32:01'),
+(5, 3, 1, 3, 1, 15.00, 1, 15.00, '2023-05-16 20:33:01', '2023-05-16 20:33:43'),
+(6, 3, 1, 3, 5, 25.00, 1, 25.00, '2023-05-16 20:33:01', '2023-05-16 20:33:43');
 
 -- --------------------------------------------------------
 
@@ -167,6 +180,7 @@ CREATE TABLE `entregas` (
   `cliente_id` bigint UNSIGNED NOT NULL,
   `orden_id` bigint UNSIGNED NOT NULL,
   `qr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `valoracion` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fecha_entrega` date NOT NULL,
   `hora_entrega` time NOT NULL,
   `fecha_hora_entrega` datetime NOT NULL,
@@ -181,9 +195,10 @@ CREATE TABLE `entregas` (
 -- Volcado de datos para la tabla `entregas`
 --
 
-INSERT INTO `entregas` (`id`, `cliente_id`, `orden_id`, `qr`, `fecha_entrega`, `hora_entrega`, `fecha_hora_entrega`, `estado`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, 'GONZALES1626711539.png', '2021-07-19', '12:18:00', '2021-07-19 12:18:00', 'ENTREGADO', '2021-07-19', 1, '2021-07-19 16:18:59', '2021-07-19 16:19:56'),
-(2, 3, 2, 'GONZALES1683572364.png', '2023-05-08', '14:59:00', '2023-05-08 14:59:00', 'PENDIENTE', '2023-05-08', 1, '2023-05-08 18:59:24', '2023-05-08 18:59:25');
+INSERT INTO `entregas` (`id`, `cliente_id`, `orden_id`, `qr`, `valoracion`, `fecha_entrega`, `hora_entrega`, `fecha_hora_entrega`, `estado`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
+(1, 5, 1, 'PORTUGUES1684267062.png', 'EXCELENTE', '2023-05-16', '15:57:00', '2023-05-16 15:57:00', 'ENTREGADO', '2023-05-16', 1, '2023-05-16 19:57:42', '2023-05-16 19:58:07'),
+(2, 4, 2, 'MARTINEZ1684269088.png', 'BUENO', '2023-05-16', '16:31:00', '2023-05-16 16:31:00', 'ENTREGADO', '2023-05-16', 1, '2023-05-16 20:31:28', '2023-05-16 20:32:01'),
+(3, 4, 3, 'MARTINEZ1684269191.png', 'EXCELENTE', '2023-05-16', '16:33:00', '2023-05-16 16:33:00', 'ENTREGADO', '2023-05-16', 1, '2023-05-16 20:33:11', '2023-05-16 20:33:43');
 
 -- --------------------------------------------------------
 
@@ -233,6 +248,7 @@ CREATE TABLE `ordens` (
   `fecha_entrega` date DEFAULT NULL,
   `hora_entrega` time DEFAULT NULL,
   `fecha_hora_entrega` datetime DEFAULT NULL,
+  `total` decimal(24,2) NOT NULL,
   `estado` varchar(155) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fecha_registro` date NOT NULL,
   `status` int NOT NULL,
@@ -244,9 +260,10 @@ CREATE TABLE `ordens` (
 -- Volcado de datos para la tabla `ordens`
 --
 
-INSERT INTO `ordens` (`id`, `nro_orden`, `cliente_id`, `distribuidor_id`, `fecha_pedido`, `hora_pedido`, `fecha_hora_pedido`, `fecha_entrega`, `hora_entrega`, `fecha_hora_entrega`, `estado`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 3, 7, '2021-07-19', '12:17:00', '2021-07-19 12:17:00', '2021-07-19', '12:17:00', '2021-07-19 12:17:00', 'ENTREGADO', '2021-07-19', 1, '2021-07-19 16:17:39', '2021-07-19 16:19:56'),
-(2, 2, 3, 4, '2023-05-08', '14:47:00', '2023-05-08 14:47:00', '2023-05-08', '15:30:00', '2023-05-08 15:30:00', 'ENVIO PENDIENTE', '2023-05-08', 1, '2023-05-08 18:48:19', '2023-05-08 18:59:25');
+INSERT INTO `ordens` (`id`, `nro_orden`, `cliente_id`, `distribuidor_id`, `fecha_pedido`, `hora_pedido`, `fecha_hora_pedido`, `fecha_entrega`, `hora_entrega`, `fecha_hora_entrega`, `total`, `estado`, `fecha_registro`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 5, 7, '2023-05-16', '15:54:09', '2023-05-16 15:54:00', '2023-05-16', '15:57:00', '2023-05-16 15:57:00', 105.00, 'ENTREGADO', '2023-05-16', 1, '2023-05-16 19:54:09', '2023-05-16 19:58:07'),
+(2, 2, 4, 7, '2023-05-16', '16:31:12', '2023-05-16 16:31:00', '2023-05-16', '16:31:00', '2023-05-16 16:31:00', 350.00, 'ENTREGADO', '2023-05-16', 1, '2023-05-16 20:31:12', '2023-05-16 20:32:01'),
+(3, 3, 4, 4, '2023-05-16', '16:33:01', '2023-05-16 16:33:00', '2023-05-16', '16:33:00', '2023-05-16 16:33:00', 40.00, 'ENTREGADO', '2023-05-16', 1, '2023-05-16 20:33:01', '2023-05-16 20:33:43');
 
 -- --------------------------------------------------------
 
@@ -257,6 +274,7 @@ INSERT INTO `ordens` (`id`, `nro_orden`, `cliente_id`, `distribuidor_id`, `fecha
 CREATE TABLE `pagos` (
   `id` bigint UNSIGNED NOT NULL,
   `entrega_id` bigint UNSIGNED NOT NULL,
+  `valoracion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `metodo_pago` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fecha_pago` date NOT NULL,
   `hora_pago` time NOT NULL,
@@ -271,9 +289,10 @@ CREATE TABLE `pagos` (
 -- Volcado de datos para la tabla `pagos`
 --
 
-INSERT INTO `pagos` (`id`, `entrega_id`, `metodo_pago`, `fecha_pago`, `hora_pago`, `fecha_hora_pago`, `total_pago`, `fecha_registro`, `created_at`, `updated_at`) VALUES
-(1, 1, 'EFECTIVO', '2021-07-19', '12:19:00', '2021-07-19 12:19:00', 75.00, '2021-07-19', '2021-07-19 16:19:52', '2021-07-19 16:19:52'),
-(2, 2, 'EFECTIVO', '2023-05-08', '15:02:00', '2023-05-08 15:02:00', 75.00, '2023-05-08', '2023-05-08 19:02:30', '2023-05-08 19:02:30');
+INSERT INTO `pagos` (`id`, `entrega_id`, `valoracion`, `metodo_pago`, `fecha_pago`, `hora_pago`, `fecha_hora_pago`, `total_pago`, `fecha_registro`, `created_at`, `updated_at`) VALUES
+(1, 1, 'EXCELENTE', 'EFECTIVO', '2023-05-16', '15:58:00', '2023-05-16 15:58:00', 105.00, '2023-05-16', '2023-05-16 19:58:07', '2023-05-16 19:58:07'),
+(2, 2, 'BUENO', 'EFECTIVO', '2023-05-16', '16:32:00', '2023-05-16 16:32:00', 350.00, '2023-05-16', '2023-05-16 20:32:01', '2023-05-16 20:32:01'),
+(3, 3, 'EXCELENTE', 'EFECTIVO', '2023-05-16', '16:33:00', '2023-05-16 16:33:00', 40.00, '2023-05-16', '2023-05-16 20:33:43', '2023-05-16 20:33:43');
 
 -- --------------------------------------------------------
 
@@ -479,7 +498,7 @@ ALTER TABLE `datos_usuarios`
 -- AUTO_INCREMENT de la tabla `detalle_ordens`
 --
 ALTER TABLE `detalle_ordens`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `distribuidors`
@@ -497,7 +516,7 @@ ALTER TABLE `empresas`
 -- AUTO_INCREMENT de la tabla `entregas`
 --
 ALTER TABLE `entregas`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `migrations`
@@ -509,13 +528,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `ordens`
 --
 ALTER TABLE `ordens`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos`
 --
 ALTER TABLE `pagos`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`

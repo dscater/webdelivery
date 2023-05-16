@@ -35,6 +35,8 @@
                                     <tr>
                                         <th>Nº</th>
                                         <th>Cliente</th>
+                                        <th>Tipo de pago</th>
+                                        <th>Valoración</th>
                                         <th>Fecha Hora Pago</th>
                                         <th>Total</th>
                                         <th>Opciones</th>
@@ -50,6 +52,8 @@
                                             <td>{{ $pago->entrega->cliente->nombre }}
                                                 {{ $pago->entrega->cliente->paterno }}
                                                 {{ $pago->entrega->cliente->materno }}</td>
+                                            <td>{{ $pago->metodo_pago }}</td>
+                                            <td>{{ $pago->valoracion }}</td>
                                             <td>{{ $pago->fecha_hora_pago }}</td>
                                             <td>{{ $pago->total_pago }}</td>
                                             <td class="btns-opciones">
@@ -98,6 +102,8 @@
                 [0, 'desc']
             ],
             columns: [
+                null,
+                null,
                 null,
                 null,
                 null,

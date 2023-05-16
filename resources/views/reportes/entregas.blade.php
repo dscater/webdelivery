@@ -145,7 +145,6 @@
         .img_celda img {
             width: 45px;
         }
-
     </style>
 </head>
 
@@ -179,20 +178,22 @@
             @php
                 $cont = 1;
             @endphp
-            @foreach ($entregas as $entrega)
+            @foreach ($detalle_ordens as $do)
                 <tr>
-                    <td>{{ $entrega->orden->nro_orden }}</td>
-                    <td>{{ $entrega->cliente->nombre }} {{ $entrega->cliente->paterno }}
-                        {{ $entrega->cliente->materno }}</td>
-                    <td>{{ $entrega->orden->producto->nombre }}</td>
-                    <td>{{ $entrega->orden->cantidad }}</td>
-                    <td>{{ $entrega->orden->empresa->nombre }}</td>
-                    <td>{{ $entrega->orden->distribuidor->datosUsuario->nombre}} {{ $entrega->orden->distribuidor->datosUsuario->paterno}} {{ $entrega->orden->distribuidor->datosUsuario->materno}} <br> "{{ $entrega->orden->distribuidor->datosUsuario->distribuidor->nombre}}"</td>
-                    <td><img src="{{ asset('imgs/qr/' . $entrega->qr) }}" alt="Foto" style="width:80px;heightL80px;">
+                    <td>{{ $do->orden->nro_orden }}</td>
+                    <td>{{ $do->entrega->cliente->full_name }}</td>
+                    <td>{{ $do->producto->nombre }}</td>
+                    <td>{{ $do->cantidad }}</td>
+                    <td>{{ $do->empresa->nombre }}</td>
+                    <td>{!! $do->orden->distribuidor
+                        ? $do->orden->distribuidor->full_name . '<br>"' . $do->orden->distribuidor->datosUsuario->distribuidor->nombre . '"'
+                        : '' !!}</td>
+                    <td><img src="{{ asset('imgs/qr/' . $do->entrega->qr) }}" alt="Foto"
+                            style="width:80px;heightL80px;">
                     </td>
-                    <td>{{ $entrega->fecha_hora_entrega }}</td>
-                    <td>{{ $entrega->estado }}</td>
-                    <td>{{ $entrega->fecha_registro }}</td>
+                    <td>{{ $do->entrega->fecha_hora_entrega }}</td>
+                    <td>{{ $do->entrega->estado }}</td>
+                    <td>{{ $do->entrega->fecha_registro }}</td>
                 </tr>
             @endforeach
         </tbody>

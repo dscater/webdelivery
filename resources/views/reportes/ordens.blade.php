@@ -145,7 +145,6 @@
         .img_celda img {
             width: 45px;
         }
-
     </style>
 </head>
 
@@ -179,19 +178,20 @@
             @php
                 $cont = 1;
             @endphp
-            @foreach ($ordens as $orden)
+            @foreach ($detalle_ordens as $do)
                 <tr>
-                    <td>{{ $orden->nro_orden }}</td>
-                    <td>{{ $orden->empresa->nombre }}</td>
-                    <td>{{ $orden->producto->nombre }}</td>
-                    <td>{{ $orden->cantidad }}</td>
-                    <td>{{ $orden->cliente->nombre }} {{ $orden->cliente->paterno }}
-                        {{ $orden->cliente->materno }}</td>
-                    <td>{{ $orden->distribuidor->datosUsuario->nombre }} {{ $orden->distribuidor->datosUsuario->paterno }} {{ $orden->distribuidor->datosUsuario->paterno }} <br> "{{ $orden->distribuidor->datosUsuario->distribuidor->nombre }}"</td>
-                    <td>{{ $orden->fecha_hora_pedido }}</td>
-                    <td>{{ $orden->fecha_hora_entrega }}</td>
-                    <td>{{ $orden->estado }}</td>
-                    <td>{{ $orden->fecha_registro }}</td>
+                    <td>{{ $do->orden->nro_orden }}</td>
+                    <td>{{ $do->empresa->nombre }}</td>
+                    <td>{{ $do->producto->nombre }}</td>
+                    <td>{{ $do->cantidad }}</td>
+                    <td>{{ $do->orden->entrega->cliente->full_name }}</td>
+                    <td>{!! $do->orden->distribuidor
+                        ? $do->orden->distribuidor->full_name . '<br>"' . $do->orden->distribuidor->datosUsuario->distribuidor->nombre . '"'
+                        : '' !!}</td>
+                    <td>{{ $do->orden->fecha_hora_pedido }}</td>
+                    <td>{{ $do->orden->fecha_hora_entrega }}</td>
+                    <td>{{ $do->orden->estado }}</td>
+                    <td>{{ $do->orden->fecha_registro }}</td>
                 </tr>
             @endforeach
         </tbody>

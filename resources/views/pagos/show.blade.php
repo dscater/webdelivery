@@ -26,18 +26,21 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            {{-- <h3 class="card-title"></h3> --}}
-                        </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <h4>Detalles de Pago</h4>
-                            <p><strong>Producto: </strong>{!! $pago->entrega->orden->producto->nombre !!}</p>
-                            <p><strong>Cantidad: </strong>{!! $pago->entrega->orden->cantidad !!}</p>
-                            <p><strong>Precio Unitario: </strong>{!! $pago->entrega->orden->producto->precio !!}</p>
-                            <p><strong>Método de pago: </strong>{!! $pago->metodo_pago !!}</p>
-                            <p><strong>Fecha y Hora: </strong>{!! date('d/m/Y H:i',strtotime($pago->fecha_hora_pago)) !!}</p>
-                            <p><strong>Total: </strong>{!! $pago->total_pago !!}</p>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p><strong>Método de pago: </strong>{!! $pago->metodo_pago !!}</p>
+                                    <p><strong>Fecha y hora del pago: </strong>{!! date('d/m/Y H:i', strtotime($pago->fecha_hora_pago)) !!}</p>
+                                    <p><strong>Total: </strong>{!! $pago->total_pago !!}</p>
+                                </div>
+                            </div>
+                            @php
+                                $orden = $pago->entrega->orden;
+                                $entrega = $pago->entrega;
+                            @endphp
+                            @include('ordens.parcial.orden')
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -52,5 +55,4 @@
 
 @section('scripts')
 @endsection
-
 @endsection

@@ -29,6 +29,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('entregas/calificacion/{entrega}', 'EntregaController@calificacion')->name('entregas.calificacion');
 Route::get('entregas/pago_entrega/{entrega}', 'EntregaController@pago_entrega')->name('entregas.pago_entrega');
+Route::post('entregas/realizar_pago/{entrega}', 'EntregaController@realizar_pago')->name('entregas.realizar_pago');
 
 Route::middleware(['auth'])->group(function () {
 

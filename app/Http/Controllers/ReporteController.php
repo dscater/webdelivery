@@ -6,6 +6,7 @@ use app\Cliente;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use app\DatosUsuario;
+use app\DetalleOrden;
 use app\Empresa;
 use app\Entrega;
 use app\Orden;
@@ -92,29 +93,30 @@ class ReporteController extends Controller
         $fecha_ini = $request->fecha_ini;
         $fecha_fin = $request->fecha_fin;
 
-        $ordens = Orden::select();
+        $detalle_ordens = DetalleOrden::select("detalle_ordens.*")
+            ->join("ordens", "ordens.id", "=", "detalle_ordens.orden_id");
         if ($empresa != 'todos' || $estado != 'todos') {
             if ($empresa != 'todos') {
-                $ordens->where('empresa_id', $empresa);
+                $detalle_ordens->where('empresa_id', $empresa);
             }
             if ($estado != 'todos') {
                 if ($estado == 'PENDIENTE') {
-                    $ordens->whereIn('estado', ['PENDIENTE','EN CAMINO']);
+                    $detalle_ordens->whereIn('ordens.estado', ['PENDIENTE', 'EN CAMINO']);
                 } else {
-                    $ordens->where('estado', $estado);
+                    $detalle_ordens->where('ordens.estado', $estado);
                 }
             }
         }
 
         if (Auth::user()->tipo == 'DISTRIBUIDOR') {
-            $ordens->where('distribuidor_id', Auth::user()->id);
+            $detalle_ordens->where('ordens.distribuidor_id', Auth::user()->id);
         }
 
-        $ordens->whereBetween('fecha_registro', [$fecha_ini, $fecha_fin]);
-        $ordens->orderBy('fecha_registro', 'desc');
-        $ordens = $ordens->get();
+        $detalle_ordens->whereBetween('ordens.fecha_registro', [$fecha_ini, $fecha_fin]);
+        $detalle_ordens->orderBy('ordens.fecha_registro', 'desc');
+        $detalle_ordens = $detalle_ordens->get();
 
-        $pdf = PDF::loadView('reportes.ordens', compact('ordens'))->setPaper('letter', 'landscape');
+        $pdf = PDF::loadView('reportes.ordens', compact('detalle_ordens'))->setPaper('letter', 'landscape');
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
         $dom_pdf = $pdf->getDomPDF();
@@ -132,26 +134,26 @@ class ReporteController extends Controller
         $fecha_ini = $request->fecha_ini;
         $fecha_fin = $request->fecha_fin;
 
-        $entregas = Entrega::select('entregas.*')
-            ->join('ordens', 'ordens.id', '=', 'entregas.orden_id');
+        $detalle_ordens = DetalleOrden::select('detalle_ordens.*')
+            ->join('entregas', 'entregas.id', '=', 'detalle_ordens.entrega_id')
+            ->join('ordens', 'ordens.id', '=', 'detalle_ordens.orden_id');
         if ($empresa != 'todos' || $cliente != 'todos') {
             if ($empresa != 'todos') {
-                $entregas->where('ordens.empresa_id', $empresa);
+                $detalle_ordens->where('detalle_ordens.empresa_id', $empresa);
             }
             if ($cliente != 'todos') {
-                $entregas->where('entregas.cliente_id', $cliente);
+                $detalle_ordens->where('entregas.cliente_id', $cliente);
             }
         }
 
         if (Auth::user()->tipo == 'DISTRIBUIDOR') {
-            $entregas->where('ordens.distribuidor_id', Auth::user()->id);
+            $detalle_ordens->where('ordens.distribuidor_id', Auth::user()->id);
         }
 
-        $entregas->whereBetween('entregas.fecha_registro', [$fecha_ini, $fecha_fin]);
-        $entregas->orderBy('entregas.fecha_registro', 'desc');
-        $entregas = $entregas->get();
-
-        $pdf = PDF::loadView('reportes.entregas', compact('entregas'))->setPaper('letter', 'landscape');
+        $detalle_ordens->whereBetween('entregas.fecha_registro', [$fecha_ini, $fecha_fin]);
+        $detalle_ordens->orderBy('entregas.fecha_registro', 'desc');
+        $detalle_ordens = $detalle_ordens->get();
+        $pdf = PDF::loadView('reportes.entregas', compact('detalle_ordens'))->setPaper('letter', 'landscape');
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
         $dom_pdf = $pdf->getDomPDF();
@@ -168,20 +170,20 @@ class ReporteController extends Controller
         $fecha_ini = $request->fecha_ini;
         $fecha_fin = $request->fecha_fin;
 
-        $pagos = Pago::select('pagos.*')
-            ->join('entregas', 'entregas.id', '=', 'pagos.entrega_id')
-            ->join('ordens', 'ordens.id', '=', 'entregas.orden_id');
+        $detalle_ordens = DetalleOrden::select('detalle_ordens.*')
+            ->join('entregas', 'entregas.id', '=', 'detalle_ordens.entrega_id')
+            ->join('pagos', 'pagos.entrega_id', '=', 'entregas.id');
         if ($empresa != 'todos') {
             if ($empresa != 'todos') {
-                $pagos->where('ordens.empresa_id', $empresa);
+                $detalle_ordens->where('detalle_ordens.empresa_id', $empresa);
             }
         }
 
-        $pagos->whereBetween('pagos.fecha_registro', [$fecha_ini, $fecha_fin]);
-        $pagos->orderBy('pagos.fecha_registro', 'desc');
-        $pagos = $pagos->get();
+        $detalle_ordens->whereBetween('pagos.fecha_registro', [$fecha_ini, $fecha_fin]);
+        $detalle_ordens->orderBy('pagos.fecha_registro', 'desc');
+        $detalle_ordens = $detalle_ordens->get();
 
-        $pdf = PDF::loadView('reportes.pagos', compact('pagos'))->setPaper('letter', 'landscape');
+        $pdf = PDF::loadView('reportes.pagos', compact('detalle_ordens'))->setPaper('letter', 'landscape');
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
         $dom_pdf = $pdf->getDomPDF();

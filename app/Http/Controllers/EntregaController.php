@@ -177,9 +177,15 @@ class EntregaController extends Controller
     public function pago_entrega(Entrega $entrega)
     {
         $usuario = $entrega->cliente->user;
-        if (Auth::login($usuario)) {
-            return view('pago', compact('entrega'));
-        }
+        Auth::login($usuario);
+        return view('calificacion', compact('entrega', 'usuario'));
+    }
+
+    public function realizar_pago(Entrega $entrega, Request $request)
+    {
+        $entrega->valoracion = $request->valoracion;
+        $entrega->save();
+        return view('pago', compact('entrega'));
     }
 
     public function qr_pdf(Entrega $entrega)
@@ -214,13 +220,16 @@ class EntregaController extends Controller
         $data = [];
         $total = 0;
         foreach ($distribuidors as $d) {
-            $ordens = Orden::where('status', 1)
+            $ordens = Orden::select("ordens.*")
+                ->join("detalle_ordens", "detalle_ordens.orden_id", "=", "ordens.id")
+                ->where('status', 1)
                 ->where('distribuidor_id', $d->user->id)
                 ->whereBetween('fecha_registro', [$fecha_ini, $fecha_fin]);
             if ($empresa != 'todos') {
-                $ordens->where('empresa_id', $empresa);
+                $ordens->where('detalle_ordens.empresa_id', $empresa);
             }
-
+            $ordens = $ordens->groupBy("ordens.id");
+            $ordens = $ordens->distinct("ordens.id");
             $ordens = $ordens->get();
             $total = (int)$total + (int)count($ordens);
             $data[] = [$d->nombre . ' ' . $d->paterno . ' ' . $d->materno . ' "' . $d->distribuidor->nombre . '"', (int)count($ordens)];

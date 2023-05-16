@@ -146,17 +146,17 @@
             width: 45px;
         }
 
-        .txt_right{
+        .txt_right {
             text-align: right;
         }
-        .font_lg{
+
+        .font_lg {
             font-size: 0.75em;
         }
 
-        .bold{
+        .bold {
             font-weight: bold;
         }
-
     </style>
 </head>
 
@@ -190,21 +190,23 @@
                 $cont = 1;
                 $total = 0;
             @endphp
-            @foreach ($pagos as $pago)
+            @foreach ($detalle_ordens as $do)
                 @php
-                    $total = $total + $pago->total_pago;
+                    $total = $total + $do->subtotal;
                 @endphp
                 <tr>
-                    <td>{{ $pago->entrega->orden->nro_orden }}</td>
-                    <td>{{ $pago->entrega->cliente->nombre }} {{ $pago->entrega->cliente->paterno }}
-                        {{ $pago->entrega->cliente->materno }}</td>
-                    <td>{{ $pago->entrega->fecha_hora_entrega }}</td>
-                    <td>{{ $pago->entrega->orden->empresa->nombre }}</td>
-                    <td>{{ $pago->entrega->orden->distribuidor->datosUsuario->nombre}} {{ $pago->entrega->orden->distribuidor->datosUsuario->paterno}} {{ $pago->entrega->orden->distribuidor->datosUsuario->materno}} <br> "{{ $pago->entrega->orden->distribuidor->datosUsuario->distribuidor->nombre}}"</td>
-                    <td>{{ $pago->entrega->orden->producto->nombre }}</td>
-                    <td>{{ $pago->entrega->orden->producto->precio }}</td>
-                    <td>{{ $pago->entrega->orden->cantidad }}</td>
-                    <td>{{ $pago->total_pago }}</td>
+                    <td>{{ $do->orden->nro_orden }}</td>
+                    <td>{{ $do->entrega->cliente->full_name }}</td>
+                    <td>{{ $do->orden->fecha_hora_entrega }}</td>
+                    <td>{{ $do->empresa->nombre }}</td>
+                    <td>{{ $do->orden->distribuidor->datosUsuario->nombre }}
+                        {{ $do->entrega->orden->distribuidor->datosUsuario->paterno }}
+                        {{ $do->entrega->orden->distribuidor->datosUsuario->materno }} <br>
+                        "{{ $do->entrega->orden->distribuidor->datosUsuario->distribuidor->nombre }}"</td>
+                    <td>{{ $do->producto->nombre }}</td>
+                    <td>{{ $do->precio }}</td>
+                    <td>{{ $do->cantidad }}</td>
+                    <td>{{ $do->subtotal }}</td>
                 </tr>
             @endforeach
             <tr>

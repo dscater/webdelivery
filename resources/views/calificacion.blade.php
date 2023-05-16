@@ -68,15 +68,17 @@
                         <div class="alert alert-danger"><button class="close"
                                 data-dismiss="alert">&times;</button>{{ session('error') }}</div>
                     @endif
-                    <h3 class="login-box-msg">REGISTRAR PAGO</h3>
-                    {{ Form::open(['route' => ['pagos.store', $entrega->id], 'method' => 'post']) }}
+                    <h3 class="login-box-msg">VALORACIÓN DEL SERVICIO</h3>
+                    {{ Form::open(['route' => ['entregas.realizar_pago', $entrega->id], 'method' => 'post']) }}
                     @csrf
                     <div class="form-group">
-                        <label>Metodo de Pago*</label>
-                        <select name="metodo_pago" id="metodo_pago" class="form-control" required>
+                        <label>¿Qué te pareció el servicio?</label>
+                        <select name="valoracion" id="valoracion" class="form-control" required>
                             <option value="">Seleccione...</option>
-                            <option value="EFECTIVO">EFECTIVO</option>
-                            <option value="DEPÓSITO BANCARIO">DEPÓSITO BANCARIO</option>
+                            <option value="EXCELENTE">EXCELENTE</option>
+                            <option value="BUENO">BUENO</option>
+                            <option value="REGULAR">REGULAR</option>
+                            <option value="MALO">MALO</option>
                         </select>
                     </div>
                     <div class="row">

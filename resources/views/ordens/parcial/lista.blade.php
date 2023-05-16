@@ -30,8 +30,11 @@
                             </div>
                         @endif
                         <div class="nombre_cliente">
-                            {{ $orden->cliente->nombre }} {{ $orden->cliente->paterno }}
-                            {{ $orden->cliente->materno }}
+                            @if (Auth::user()->tipo != 'CLIENTE')
+                                <a href="{{ route('ordens.edit', $orden->id) }}">{{ $orden->cliente->full_name }}</a>
+                            @else
+                                {{ $orden->cliente->full_name }}
+                            @endif
                         </div>
                         <div class="ocupacion_cliente">
                             Pedido: {{ date('d/m/Y H:i', strtotime($orden->fecha_hora_pedido)) }}

@@ -13,6 +13,9 @@
                                 "{{ $entrega->orden->distribuidor->datosUsuario->distribuidor->nombre }}"</p>
                         @endif
                         <p><strong>Fecha y hora de pedido: </strong>{{ $orden->fecha_hora_pedido }}</p>
+                        @if($orden->entrega)
+                        <p><strong>Fecha y hora de entrenga: </strong>{{ $orden->fecha_hora_entrega }}</p>
+                        @endif
                     </div>
                     <div class="col-md-12">
                         <table class="table table-bordered">
